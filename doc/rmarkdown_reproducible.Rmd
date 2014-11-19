@@ -1,23 +1,58 @@
 ---
-title: "Using Rmarkdown and Github for reproducible and collaborative research"
+title: "Using Rmarkdown and Github for Reproducible Research"
 author: "Jinliang Yang"
-date: "November 5, 2014"
-output: beamer_presentation
-toc: true
+date: "November 18, 2014"
+output: 
+  beamer_presentation:
+    theme: "AnnArbor"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
 ---
 
-## show case
+## People behind part of this work
 
-something run here
-dfaf
+\graphicspath{{../graphs/}}
+\begin{figure}
+\includegraphics{guys.png}
+\caption{}
+\label{fig:mfig1}
+\end{figure}
 
-## introduce people behind this work
+## A show case of Markdown
+
+- **markdown**: a simple plain text format originally designed for html translation.  
+The syntax of [_markdown_](http://0.0.0.0:4000/reproducible/2014/11/05/reproducible-research/) is as simple as only one page.
+
+- **Jekyll**: a static websites generator using **markdown**  
+see a toy [_website_](http://0.0.0.0:4000) served by [_Jekyll_](http://jekyllrb.com/)  
+  
+- Free hosting with **Github pages** with a **gh-pages** branch  
+
+## A show case of Rmarkdown
+
+- Documents  
+  Create _HTML_, _PDF_ and _MS Word_ Documents via **RStudio**
+
+- Presentation  
+  Create _Beamer_, _ioslides_ and _Slidy_ presentations.
+
+Yihui developed this R package **knitr**, which enables Rmarkdown to include any embedded R code chunks via **Pandoc**. 
+
+## R code chunks options
+- Code evaluation, docoration and plots {r, eval=TRUE, echo=TRUE} 
+```{r, eval=TRUE, fig.height=4, fig.width=7}
+x <- seq(-4, 4, length=100)
+hx <- dnorm(x)
+plot(x, hx, type="l", lty=2, ylab="Density", 
+     main="A t Distribution")
+```
+
 
 ## Setup your project
 
-- using __github__ do the version control
-- using **packrat** do the R package dependency management
-- using **ProjectTemplate** to layout the directories  
+- using __GitHub__ to do the version control
+- using **packrat** to do the R package dependency management
+- using **ProjectTemplate** to layout working directories  
 
 ```{r, eval=FALSE}
 #install.packages('ProjectTemplate')
@@ -26,36 +61,32 @@ create.project('temp')
 system("mv temp/* .")
 system("rm -r temp/")
 ```
-Or simply just copy your directory system everything here!
+Or just copy your favorite `directory` into the project!
 
 ## Setup your project
 \graphicspath{{../graphs/}}
 \begin{figure}
 \includegraphics{dir.png}
 \caption{Your directory system}
-\label{fig:mfig1}
+\label{fig:mfig2}
 \end{figure}
 
-## R Markdown
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Notes for better reproducible
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+- Use relative path not absolute path
+- **source** your codes rather than embedded as R code chunks
+- Turn off the R code evaluation for computational heavy work
+- gitignore large data
+- for non-R codes, refering **shell** scripts
 
-## Slide with Bullets
+## More notes about general programming
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+- Small is beautiful.
+- Make each program do one thing well.
+- Build a prototype as soon as possible.
+- Choose portability over efficiency.
+- Store data in flat text files.
+- Use shell scripts to increase leverage and portability.
 
-## Slide with R Code and Output
-
-```{r}
-summary(cars)
-```
-
-## Slide with Plot
-
-```{r, echo=FALSE}
-plot(cars)
-```
+By Mike Gancarz (1994)
 
