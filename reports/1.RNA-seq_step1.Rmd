@@ -1,0 +1,49 @@
+---
+title: "RNA-seq data preparation"
+author: "Jinliang Yang, Ross-Ibarra lab"
+date: "February 17, 2015"
+output: html_document
+---
+
+
+
+
+Download the data from `NCBI` Sequence Read Archive (SRA) database:
+
+### Download RNA-seq data
+
+
+[wget](http://www.gnu.org/software/wget/wget.html)
+
+```{r, eval=FALSE}
+### Oryza barthii, leaf RNA-seq, PE, 121 bp
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170742/SRR1170742.sra
+### Oryza barthii, root RNA-seq, PE, 121bp
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170744/SRR1170744.sra
+
+### extract the PE reads from sra format
+fastq-dump --split-spot --split-3 -A SRR1170742.sra
+fastq-dump --split-spot --split-3 -A SRR1170744.sra
+```
+
+### Download reference genome and annotation data
+
+Two reference genomes for rice are available. __Oryza sativa__ indica is one of the them. The genome assembly and gene annotation can be downloaded from [EnsemblPlants](http://plants.ensembl.org/Oryza_indica/Info/Index).
+
+```{r, eval=FALSE}
+wget ftp://ftp.ensemblgenomes.org/pub/plants/release-25/fasta/oryza_indica/dna/Oryza_indica.ASM465v1.25.dna.chromosome.*.fa.gz
+```
+
+### Setup alignment database
+
+[GSNAP (Genomic Short-read Nucleotide Alignment Program)](http://www.ncbi.nlm.nih.gov/pubmed/20147302) is a fast and splice-aware aligner. You can download and install it from [here](http://research-pub.gene.com/gmap/). 
+
+```{r, eval=FALSE}
+### load the module of gmap if you use farm
+module load gmap/2014-05-15
+### http://research-pub.gene.com/gmap/src/README
+### Setting up to build a GMAP/GSNAP database (one chromosome per FASTA entry)
+### Note: be careful about your dir specified by -D
+gmap_build -D ~/dbcenter/OS_indica/ -d indica_ASM465v1.25_gsnap -g Oryza_indica.ASM465v1.25.dna.chromosome*fa.gz > gmapbuild.log  
+
+```
