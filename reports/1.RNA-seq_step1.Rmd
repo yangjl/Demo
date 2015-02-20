@@ -26,6 +26,24 @@ fastq-dump --split-spot --split-3 -A SRR1170742.sra
 fastq-dump --split-spot --split-3 -A SRR1170744.sra
 ```
 
+
+```{r, eval=FALSE}
+cat SRR1170744.sra_1.fastq | awk 'NR >= 1  && NR <= 40000000 { print }' > SRR1170744.sub1_1.fastq
+cat SRR1170744.sra_2.fastq | awk 'NR >= 1  && NR <= 40000000 { print }' > SRR1170744.sub1_2.fastq
+cat SRR1170744.sra_1.fastq | awk 'NR >= 40000001  && NR <= 80000000 { print }' > SRR1170744.sub2_1.fastq
+cat SRR1170744.sra_2.fastq | awk 'NR >= 40000001  && NR <= 80000000 { print }' > SRR1170744.sub2_2.fastq
+
+cat SRR1170742.sra_1.fastq | awk 'NR >= 1  && NR <= 40000000 { print }' > SRR1170742.sub1_1.fastq
+cat SRR1170742.sra_2.fastq | awk 'NR >= 1  && NR <= 40000000 { print }' > SRR1170742.sub1_2.fastq
+cat SRR1170742.sra_1.fastq | awk 'NR >= 40000001  && NR <= 80000000 { print }' > SRR1170742.sub2_1.fastq
+cat SRR1170742.sra_2.fastq | awk 'NR >= 40000001  && NR <= 80000000 { print }' > SRR1170742.sub2_2.fastq
+
+
+
+
+```
+
+
 ### Download reference genome and annotation data
 
 Two reference genomes for rice are available. __Oryza sativa__ indica is one of the them. The genome assembly and gene annotation can be downloaded from [EnsemblPlants](http://plants.ensembl.org/Oryza_indica/Info/Index).

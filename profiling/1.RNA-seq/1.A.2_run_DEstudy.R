@@ -18,6 +18,9 @@ qualPlot(list("trimmed"=trimed, "untrimmed"=s.fastq))
 ###################################################
 source("http://bioconductor.org/biocLite.R")
 biocLite("GenomicFeatures")
+source("http://bioconductor.org/biocLite.R")
+biocLite("GenomicAlignments")
+
 library(GenomicFeatures)
 txdb <- makeTranscriptDbFromGFF(file="~/dbcenter/OS_indica/Oryza_indica.ASM465v1.25.gff3",
                                 format="gff3",
@@ -33,6 +36,7 @@ eByg <- exonsBy(txdb, by="gene")
 length(eByg)
 #[1] 39049
 
+
 ###################################################
 ### collect read count
 ###################################################
@@ -47,8 +51,8 @@ collect_countDF <- function(bamfile="", eByg=eByg){
 }
 
 ####
-countDF1 <- collect_countDF(dir="~/NGS/BD/7-31-14/rep1", eByg=eByg)
-countDF2 <- collect_countDF(dir="~/NGS/BD/7-31-14/rep2", eByg=eByg)
+countDF1 <- collect_countDF(bamfile="largedata/SRR1170742.concordant_uniq.bam", eByg=eByg)
+countDF2 <- collect_countDF(bamfile="largedata/SRR1170744.concordant_uniq.bam", eByg=eByg)
 
 
 repplot <- function(){
