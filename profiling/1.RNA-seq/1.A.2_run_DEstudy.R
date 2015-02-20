@@ -16,40 +16,33 @@ qualPlot(list("trimmed"=trimed, "untrimmed"=s.fastq))
 ### prepare genomic features
 # More Robust: Store Annotations in TranscriptDb
 ###################################################
+source("http://bioconductor.org/biocLite.R")
+biocLite("GenomicFeatures")
 library(GenomicFeatures)
-txdb <- makeTranscriptDbFromGFF(file="~/DBcenter/BD_v1.0/annot_v1.2/Bdistachyon_192_gene_exons.gff3",
+txdb <- makeTranscriptDbFromGFF(file="~/dbcenter/OS_indica/Oryza_indica.ASM465v1.25.gff3",
                                 format="gff3",
-                                dataSource="ftp://ftp.jgi-psf.org/pub/compgen/phytozome/v9.0/Bdistachyon/",
-                                species="brachypodium")
-saveDb(txdb, file="~/Documents/BDproj/cache/Bd192.sqlite")
-txdb <- loadDb("~/Documents/BDproj/cache/Bd192.sqlite") 
+                                dataSource="ftp://ftp.ensemblgenomes.org/pub/plants/release-25/gff3/oryza_indica/Oryza_indica.ASM465v1.25.gff3.gz",
+                                species="oryza_indica")
+saveDb(txdb, file="cache/Bd192.sqlite")
+
+txdb <- loadDb("cache/Osativa_204_v7.0.sqlite") 
 columns(txdb)
 keytypes(txdb)
 
 eByg <- exonsBy(txdb, by="gene")
 length(eByg)
-#[1] 26552
+#[1] 39049
 
 ###################################################
 ### collect read count
 ###################################################
-collect_countDF <- function(dir="~/NGS/BD/7-31-14/rep2", eByg=eByg){
-  files <- list.files(path = dir, pattern="^Sample")
+collect_countDF <- function(bamfile="", eByg=eByg){
+  
   countDF <- data.frame(row.names=names(eByg))
-  for(i in 1:length(files)){
-    tmppath <- paste(dir, files[i], sep="/")
-    bamfile <- list.files(path=tmppath, pattern="bam$")
-    setwd(tmppath)
-    if(length(bamfile) != 1){
-      #return(res)
-      stop(paste("Error!!! no or more than one bam file!", tmppath))
-    }else{
-      aligns <- readGAlignmentsFromBam(bamfile) # Substitute next two lines with this one.
-      counts <- countOverlaps(eByg, aligns, ignore.strand=TRUE)
-      countDF <- cbind(countDF, counts)
-      names(countDF)[ncol(countDF)] <- bamfile
-    }
-  }
+  aligns <- readGAlignmentsFromBam(bamfile) # Substitute next two lines with this one.
+  counts <- countOverlaps(eByg, aligns, ignore.strand=TRUE)
+  countDF <- cbind(countDF, counts)
+  names(countDF)[ncol(countDF)] <- bamfile
   return(countDF)  
 }
 
