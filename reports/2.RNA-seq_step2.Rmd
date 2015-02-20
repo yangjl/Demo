@@ -16,6 +16,19 @@ source("profiling/1.RNA-seq/1.A.1_run_alignment.R")
 
 ```
 
+
+### prepare genomic features
+
+```{}
+source("http://bioconductor.org/biocLite.R")
+biocLite("GenomicFeatures")
+library(GenomicFeatures)
+txdb <- makeTranscriptDbFromGFF(file="~/DBcenter/BD_v1.0/annot_v1.2/Bdistachyon_192_gene_exons.gff3",
+                                format="gff3",
+                                dataSource="ftp://ftp.jgi-psf.org/pub/compgen/phytozome/v9.0/Bdistachyon/",
+                                species="brachypodium")
+```
+
 You can also embed plots, for example:
 
 ```{r, echo=FALSE}

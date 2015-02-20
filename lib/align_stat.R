@@ -1,3 +1,7 @@
+### Jinliang Yang
+### collect alignment stat
+
+
 align_stat2 <- function(dir="/mnt/02/yangjl/NGS/BD/5-14-14/"){
   library(ShortRead); library(Rsamtools)
   files <- list.files(path = dir, pattern="^Sample")

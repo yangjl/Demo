@@ -45,7 +45,7 @@ setUpslurm <- function(slurmsh="largedata/GenSel/CL_test.sh",
     
     #### warning and message
     cat("",
-        paste("python /home/jolyang/bin/send_email.py -s", slurmsh),
+        paste("#python /home/jolyang/bin/send_email.py -s", slurmsh),
         file=slurmsh, sep="\n", append=TRUE);
     
     message(paste("###>>> In this path: cd ", wd, sep=""), "\n",
