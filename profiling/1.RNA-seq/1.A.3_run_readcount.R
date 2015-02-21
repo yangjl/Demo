@@ -2,31 +2,21 @@
 ## 8.11.2014
 ##
 
-####### quality checking of the reads
-library(qrqc)
-s.fastq <- readSeqFile(filename="/mnt/02/yangjl/NGS/BD/7-31-14/rep2/Sample_3-2-12-1/3-2-12-1_CAGATC.trimmed.fq",
-                       max.length=110)
-trimed <- readSeqFile(filename="/mnt/02/yangjl/NGS/BD/4-29-14/Sample_3-2-12-1/3-2-12-1_CAGATC_L006_R1_001.trimmed.fq",
-                      max.length=150)
-qualPlot(s.fastq)
-qualPlot(list("trimmed"=trimed, "untrimmed"=s.fastq))
+samtools view -h -o out.sam in.bam
+samtools view -h leaf.rep1_1.fastq.concordant_uniq.bam -o leaf.rep1_1.fastq.concordant_uniq.sam
+htseq-count leaf/leaf.rep3.concordant_uniq OS_indica/Oryza_indica.ASM465v1.25.gff3 -i Parent > test2.out
 
 
-###################################################
-### prepare genomic features
-# More Robust: Store Annotations in TranscriptDb
-###################################################
-source("http://bioconductor.org/biocLite.R")
-biocLite("GenomicFeatures")
-source("http://bioconductor.org/biocLite.R")
-biocLite("GenomicAlignments")
+
 
 library(GenomicFeatures)
 library(GenomicAlignments)
-txdb <- makeTranscriptDbFromGFF(file="~/dbcenter/OS_indica/Oryza_indica.ASM465v1.25.gff3",
+
+txdb <- makeTranscriptDbFromGFF(file="largedata/OS_indica/Oryza_indica.ASM465v1.25_edited.gff3",
                                 format="gff3",
                                 dataSource="ftp://ftp.ensemblgenomes.org/pub/plants/release-25/gff3/oryza_indica/Oryza_indica.ASM465v1.25.gff3.gz",
                                 species="oryza_indica")
+
 saveDb(txdb, file="cache/Bd192.sqlite")
 
 txdb <- loadDb("largedata/Osativa_204_v7.0.sqlite") 

@@ -91,6 +91,16 @@ The results can be checked in the `largedata/leaf/` and `largedata/root/` folder
 
 
 
+### Count reads in gene models
+
+###################################################
+### prepare genomic features
+# More Robust: Store Annotations in TranscriptDb
+###################################################
+source("http://bioconductor.org/biocLite.R")
+biocLite("GenomicFeatures")
+source("http://bioconductor.org/biocLite.R")
+biocLite("GenomicAlignments")
 
 
 

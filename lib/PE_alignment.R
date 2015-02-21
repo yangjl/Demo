@@ -19,9 +19,9 @@ setup_PE_alignment <- function(
     fq2 <- paste0("largedata/", fq$fq2[i]) 
     #qc2 <- paste0(fq2, ".qc")
     
-    prefix <- gsub("\\.*$", "", fq1)
-    uniq <- paste(prefix, "paired_uniq", sep=".")
-    bam <- paste(prefix, "paired_uniq.bam", sep=".")
+    prefix <- gsub("_1\\.fastq$", "", fq1)
+    uniq <- paste(prefix, "concordant_uniq", sep=".")
+    bam <- paste(prefix, "concordant_uniq.bam", sep=".")
     
     cat(#### GSNAP alignment
         # -m miss match
