@@ -22,13 +22,14 @@ source("http://bioconductor.org/biocLite.R")
 biocLite("GenomicAlignments")
 
 library(GenomicFeatures)
+library(GenomicAlignments)
 txdb <- makeTranscriptDbFromGFF(file="~/dbcenter/OS_indica/Oryza_indica.ASM465v1.25.gff3",
                                 format="gff3",
                                 dataSource="ftp://ftp.ensemblgenomes.org/pub/plants/release-25/gff3/oryza_indica/Oryza_indica.ASM465v1.25.gff3.gz",
                                 species="oryza_indica")
 saveDb(txdb, file="cache/Bd192.sqlite")
 
-txdb <- loadDb("cache/Osativa_204_v7.0.sqlite") 
+txdb <- loadDb("largedata/Osativa_204_v7.0.sqlite") 
 columns(txdb)
 keytypes(txdb)
 

@@ -5,19 +5,79 @@ date: "February 17, 2015"
 output: html_document
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+### RNA-seq Differential Expression Analysis in Four Steps
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+1. Quality checking and data cleaning
+2. Aligning RNA-seq reads to reference genome
+3. Count reads in gene models
+4. Differential gene expression study
+
+The following four source files will do the four analysis repectively.
 
 ```{r, eval=FALSE}
+### quality checking
+source("profiling/1.RNA-seq/1.A.1_run_qc.R")
+### set up alignment
+source("profiling/1.RNA-seq/1.A.2_run_alignment.R")
+### prepare genomic features and count reads in genes
+source("profiling/1.RNA-seq/1.A.3_run_readcount.R")
+### DE analysis
+source("profiling/1.RNA-seq/1.A.4_run_DEseq.R")
+```
 
-source("profiling/1.RNA-seq/1.A.1_run_alignment.R")
+### FASTQ file
 
+The sequencing reads are delivered to the user typically as a FASTQ file (with the extension of ".fastq" or ".fq"). These FASTQ files contain four lines for each read:
 
+* line 1: sequence id
+* line 2: nucleotide sequence
+* line 3: a "+" sign separator, optionally with the read identifier repeated
+* line 4: a corresponding ASCII string of quality characters
+
+```{r, eval=TRUE}
+fq <- read.delim("../data/subset.fastq", header=FALSE)
+fq
 ```
 
 
-### prepare genomic features
+### Quality checking and data cleaning
+
+The following chunk of code is the same as `profiling/1.RNA-seq/1.A.1_run_qc.R`. Basically, it loops through all the PE fastq files specified by the `largedata/sample.txt`. It will generate a slurm script to call [FASTX-Toolkit](http://hannonlab.cshl.edu/fastx_toolkit/commandline.html#fastq_quality_filter_usage) to conduct the quality checking and quality filtering of the fastq files.
+
+
+```{r, eval = FALSE}
+### input
+fastqfile = "largedata/sample.txt"
+### output scripts
+shfile = "largedata/step1_qc.sh"
+slurmfile = "largedata/slurm_step1_qc.sh"
+### int passes to fastq_quality_filer Minimum quality score to keep
+q = 25
+### Minimum percent of bases that must have [-q] quality
+p = 50
+
+######################################################################
+source("lib/PE_qc.R")
+PE_qc(fqfile = fastqfile, shfile = shfile, q = q, p = p)
+
+source("lib/setUpslurm.R")
+setUpslurm(slurmsh=slurmfile, codesh=paste("sh", shfile), wd=NULL, jobid="qcjob", email=myemail)
+
+```
+
+You can submit the slurm job as following:
+`sbatch -p serial --ntasks 1 largedata/slurm_step1_qc.sh`
+
+![alt](../largedata/leaf/leaf.rep1_1.fastq.qc.png)
+![alt](../largedata/leaf/leaf.rep1_1.fastq.nud.png)
+
+
+
+
+It is important to keep in mind the nature of those "features" to which reads were mapped for counting. If, for example, reads are mapped to a set of references that include different splice variants of the same gene, those splice variants will each be analyzed separately unless treated as a unit. The nature of the features encompassed by read count data depends on what the mapping reference is (e.g. a genome or transcriptome assembly), and what type of aligner was used. Some pieces of analysis software are designed to handle isoform differences (Leng et al. 2013; Trapnell et al. 2013), and others analyze generic features of the transcriptome, so please consider this when selecting both read alignment and differential expression software.
+
+
+### Important steps and useful functions
 
 ```{r, eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
@@ -31,6 +91,23 @@ txdb <- makeTranscriptDbFromGFF(
 
 saveDb(txdb, file="cache/Osativa_204_v7.0.sqlite")
 ```
+
+
+```{r, eval=FALSE}
+###################################################
+### Function to compute RPKM
+###################################################
+getRPKM <- function(counts, gffsub=eByg) {
+  geneLengthsInKB <- sum(width(reduce(gffsub)))/1000 # Length of exon union per gene in kbp
+  millionsMapped <- sum(counts)/1e+06 # Factor for converting to million of mapped reads.
+  rpm <- counts/millionsMapped # RPK: reads per kilobase of exon model.
+  rpkm <- rpm/geneLengthsInKB # RPKM: reads per kilobase of exon model per million mapped reads.
+  return(rpkm)
+}
+
+```
+
+
 
 You can also embed plots, for example:
 

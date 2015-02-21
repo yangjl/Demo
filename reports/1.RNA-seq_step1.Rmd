@@ -5,52 +5,84 @@ date: "February 17, 2015"
 output: html_document
 ---
 
-
-
-
-Download the data from `NCBI` Sequence Read Archive (SRA) database:
-
 ### Download RNA-seq data
 
-
-[wget](http://www.gnu.org/software/wget/wget.html)
+All the RNA-seq data used in this class were downloaded from `NCBI` Sequence Read Archive (SRA) database using [wget](http://www.gnu.org/software/wget/wget.html).
+Note: the RNA-seq data and intermediate outputs are put in the folder of `largedata`.
 
 ```{r, eval=FALSE}
+
+cd largedata/leaf/
 ### Oryza barthii, leaf RNA-seq, PE, 121 bp
 wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170742/SRR1170742.sra
-### Oryza barthii, root RNA-seq, PE, 121bp
-wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170744/SRR1170744.sra
-
 ### extract the PE reads from sra format
 fastq-dump --split-spot --split-3 -A SRR1170742.sra
+
+### Oryza barthii, root RNA-seq, PE, 121bp
+cd largedata/root/
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170744/SRR1170744.sra
 fastq-dump --split-spot --split-3 -A SRR1170744.sra
 ```
 
+### Data for homework `Oryza glumipatula`
+```{r, eval=FALSE}
+### Oryza glumipatula root RNA seq
+
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1174777/SRR1174777.sra
+```
 
 ```{r, eval=FALSE}
-cat SRR1170744.sra_1.fastq | awk 'NR >= 1  && NR <= 40000000 { print }' > SRR1170744.sub1_1.fastq
-cat SRR1170744.sra_2.fastq | awk 'NR >= 1  && NR <= 40000000 { print }' > SRR1170744.sub1_2.fastq
-cat SRR1170744.sra_1.fastq | awk 'NR >= 40000001  && NR <= 80000000 { print }' > SRR1170744.sub2_1.fastq
-cat SRR1170744.sra_2.fastq | awk 'NR >= 40000001  && NR <= 80000000 { print }' > SRR1170744.sub2_2.fastq
+### checking the total number of reads
+wc -l SRR1170742.sra_1.fastq 
+#160468896 SRR1170742.sra_1.fastq
 
-cat SRR1170742.sra_1.fastq | awk 'NR >= 1  && NR <= 40000000 { print }' > SRR1170742.sub1_1.fastq
-cat SRR1170742.sra_2.fastq | awk 'NR >= 1  && NR <= 40000000 { print }' > SRR1170742.sub1_2.fastq
-cat SRR1170742.sra_1.fastq | awk 'NR >= 40000001  && NR <= 80000000 { print }' > SRR1170742.sub2_1.fastq
-cat SRR1170742.sra_2.fastq | awk 'NR >= 40000001  && NR <= 80000000 { print }' > SRR1170742.sub2_2.fastq
+### split the fq files into three files as arbitrarily assigned replications
+cat SRR1170742.sra_1.fastq | awk 'NR >= 4000001  && NR <= 8000000 { print }' > leaf.rep1_1.fastq
+cat SRR1170742.sra_2.fastq | awk 'NR >= 4000001  && NR <= 8000000 { print }' > leaf.rep1_2.fastq
+cat SRR1170742.sra_1.fastq | awk 'NR >= 14000001  && NR <= 18000000 { print }' > leaf.rep2_1.fastq
+cat SRR1170742.sra_2.fastq | awk 'NR >= 14000001  && NR <= 18000000 { print }' > leaf.rep2_2.fastq
+cat SRR1170742.sra_1.fastq | awk 'NR >= 24000001  && NR <= 28000000 { print }' > leaf.rep3_1.fastq
+cat SRR1170742.sra_2.fastq | awk 'NR >= 24000001  && NR <= 28000000 { print }' > leaf.rep3_2.fastq
 
+wc -l SRR1170744.sra_1.fastq 
+#151937424 SRR1170744.sra_1.fastq
 
+cat SRR1170744.sra_1.fastq | awk 'NR >= 4000001  && NR <= 8000000 { print }' > root.rep1_1.fastq
+cat SRR1170744.sra_2.fastq | awk 'NR >= 4000001  && NR <= 8000000 { print }' > root.rep1_2.fastq
+cat SRR1170744.sra_1.fastq | awk 'NR >= 14000001  && NR <= 18000000 { print }' > root.rep2_1.fastq
+cat SRR1170744.sra_2.fastq | awk 'NR >= 14000001  && NR <= 18000000 { print }' > root.rep2_2.fastq
+cat SRR1170744.sra_1.fastq | awk 'NR >= 24000001  && NR <= 28000000 { print }' > root.rep3_1.fastq
+cat SRR1170744.sra_2.fastq | awk 'NR >= 24000001  && NR <= 28000000 { print }' > root.rep3_2.fastq
 
 
 ```
 
+### Create a txt file
+
+Open `vi`, specify the **relative location** and names of the fastq files.
+And, the `replications` and `treatments` of your experimental design.
+
+```{r, eval=FALSE}
+### copy the following text into your sample.txt file.
+fq1 fq2 rep tissue
+leaf/leaf.rep1_1.fastq leaf/leaf.rep1_2.fastq rep1 leaf
+leaf/leaf.rep2_1.fastq leaf/leaf.rep2_2.fastq rep2 leaf
+leaf/leaf.rep3_1.fastq leaf/leaf.rep3_2.fastq rep3 leaf
+root/root.rep1_1.fastq root/root.rep1_2.fastq rep1 root
+root/root.rep2_1.fastq root/root.rep2_2.fastq rep2 root
+root/root.rep3_1.fastq root/root.rep3_2.fastq rep3 root
+```
 
 ### Download reference genome and annotation data
 
 Two reference genomes for rice are available. __Oryza sativa__ indica is one of the them. The genome assembly and gene annotation can be downloaded from [EnsemblPlants](http://plants.ensembl.org/Oryza_indica/Info/Index).
 
 ```{r, eval=FALSE}
+mkdir OS_indica
+cd OS_indica
 wget ftp://ftp.ensemblgenomes.org/pub/plants/release-25/fasta/oryza_indica/dna/Oryza_indica.ASM465v1.25.dna.chromosome.*.fa.gz
 ```
+
 
 ### Setup alignment database
 
@@ -62,6 +94,6 @@ module load gmap/2014-05-15
 ### http://research-pub.gene.com/gmap/src/README
 ### Setting up to build a GMAP/GSNAP database (one chromosome per FASTA entry)
 ### Note: be careful about your dir specified by -D
-gmap_build -D ~/dbcenter/OS_indica/ -d indica_ASM465v1.25_gsnap -g Oryza_indica.ASM465v1.25.dna.chromosome*fa.gz > gmapbuild.log  
+gmap_build -D largedata/OS_indica/ -d ASM465v1.25_gsnap -g Oryza_indica.ASM465v1.25.dna.chromosome*fa.gz > gmapbuild.log  
 
 ```

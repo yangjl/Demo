@@ -59,23 +59,65 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </div>
 
 
-<p>Download the data from <code>NCBI</code> Sequence Read Archive (SRA) database:</p>
 <div id="download-rna-seq-data" class="section level3">
 <h3>Download RNA-seq data</h3>
-<p><a href="http://www.gnu.org/software/wget/wget.html">wget</a></p>
-<pre class="r"><code>### Oryza barthii, leaf RNA-seq, PE, 121 bp
+<p>All the RNA-seq data used in this class were downloaded from <code>NCBI</code> Sequence Read Archive (SRA) database using <a href="http://www.gnu.org/software/wget/wget.html">wget</a>. Note: the RNA-seq data and intermediate outputs are put in the folder of <code>largedata</code>.</p>
+<pre class="r"><code>cd largedata/leaf/
+### Oryza barthii, leaf RNA-seq, PE, 121 bp
 wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170742/SRR1170742.sra
-### Oryza barthii, root RNA-seq, PE, 121bp
-wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170744/SRR1170744.sra
-
 ### extract the PE reads from sra format
 fastq-dump --split-spot --split-3 -A SRR1170742.sra
+
+### Oryza barthii, root RNA-seq, PE, 121bp
+cd largedata/root/
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170744/SRR1170744.sra
 fastq-dump --split-spot --split-3 -A SRR1170744.sra</code></pre>
+</div>
+<div id="data-for-homework-oryza-glumipatula" class="section level3">
+<h3>Data for homework <code>Oryza glumipatula</code></h3>
+<pre class="r"><code>### Oryza glumipatula root RNA seq
+
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1174777/SRR1174777.sra</code></pre>
+<pre class="r"><code>### checking the total number of reads
+wc -l SRR1170742.sra_1.fastq 
+#160468896 SRR1170742.sra_1.fastq
+
+### split the fq files into three files as arbitrarily assigned replications
+cat SRR1170742.sra_1.fastq | awk 'NR &gt;= 4000001  &amp;&amp; NR &lt;= 8000000 { print }' &gt; leaf.rep1_1.fastq
+cat SRR1170742.sra_2.fastq | awk 'NR &gt;= 4000001  &amp;&amp; NR &lt;= 8000000 { print }' &gt; leaf.rep1_2.fastq
+cat SRR1170742.sra_1.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; leaf.rep2_1.fastq
+cat SRR1170742.sra_2.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; leaf.rep2_2.fastq
+cat SRR1170742.sra_1.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; leaf.rep3_1.fastq
+cat SRR1170742.sra_2.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; leaf.rep3_2.fastq
+
+wc -l SRR1170744.sra_1.fastq 
+#151937424 SRR1170744.sra_1.fastq
+
+cat SRR1170744.sra_1.fastq | awk 'NR &gt;= 4000001  &amp;&amp; NR &lt;= 8000000 { print }' &gt; root.rep1_1.fastq
+cat SRR1170744.sra_2.fastq | awk 'NR &gt;= 4000001  &amp;&amp; NR &lt;= 8000000 { print }' &gt; root.rep1_2.fastq
+cat SRR1170744.sra_1.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; root.rep2_1.fastq
+cat SRR1170744.sra_2.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; root.rep2_2.fastq
+cat SRR1170744.sra_1.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; root.rep3_1.fastq
+cat SRR1170744.sra_2.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; root.rep3_2.fastq</code></pre>
+</div>
+<div id="create-a-txt-file" class="section level3">
+<h3>Create a txt file</h3>
+<p>Open <code>vi</code>, specify the <strong>relative location</strong> and names of the fastq files. And, the <code>replications</code> and <code>treatments</code> of your experimental design.</p>
+<pre class="r"><code>### copy the following
+fq1 fq2 rep tissue
+leaf/leaf.rep1_1.fastq leaf/leaf.rep1_2.fastq rep1 leaf
+leaf/leaf.rep2_1.fastq leaf/leaf.rep2_2.fastq rep2 leaf
+leaf/leaf.rep3_1.fastq leaf/leaf.rep3_2.fastq rep3 leaf
+root/root.rep1_1.fastq root/root.rep1_2.fastq rep1 root
+root/root.rep2_1.fastq root/root.rep2_2.fastq rep2 root
+root/root.rep3_1.fastq root/root.rep3_2.fastq rep3 root</code></pre>
 </div>
 <div id="download-reference-genome-and-annotation-data" class="section level3">
 <h3>Download reference genome and annotation data</h3>
 <p>Two reference genomes for rice are available. <strong>Oryza sativa</strong> indica is one of the them. The genome assembly and gene annotation can be downloaded from <a href="http://plants.ensembl.org/Oryza_indica/Info/Index">EnsemblPlants</a>.</p>
-<pre class="r"><code>wget ftp://ftp.ensemblgenomes.org/pub/plants/release-25/fasta/oryza_indica/dna/Oryza_indica.ASM465v1.25.dna.chromosome.*.fa.gz</code></pre>
+<pre class="r"><code>mkdir OS_indica
+cd OS_indica
+wget ftp://ftp.ensemblgenomes.org/pub/plants/release-25/fasta/oryza_indica/dna/Oryza_indica.ASM465v1.25.dna.chromosome.*.fa.gz</code></pre>
 </div>
 <div id="setup-alignment-database" class="section level3">
 <h3>Setup alignment database</h3>
@@ -85,7 +127,7 @@ module load gmap/2014-05-15
 ### http://research-pub.gene.com/gmap/src/README
 ### Setting up to build a GMAP/GSNAP database (one chromosome per FASTA entry)
 ### Note: be careful about your dir specified by -D
-gmap_build -D ~/dbcenter/OS_indica/ -d indica_ASM465v1.25_gsnap -g Oryza_indica.ASM465v1.25.dna.chromosome*fa.gz &gt; gmapbuild.log  </code></pre>
+gmap_build -D largedata/OS_indica/ -d ASM465v1.25_gsnap -g Oryza_indica.ASM465v1.25.dna.chromosome*fa.gz &gt; gmapbuild.log  </code></pre>
 </div>
 
 
