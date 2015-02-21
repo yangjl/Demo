@@ -1,3 +1,6 @@
+### Jinliang Yang
+### Feb 20th, 2015
+
 ### input
 fastqfile = "largedata/sample.txt"
 
@@ -9,14 +12,9 @@ q = 25
 ### Minimum percent of bases that must have [-q] quality
 p = 50
 
-
-
-
 ######################################################################
 source("lib/PE_qc.R")
 PE_qc(fqfile = fastqfile, shfile = shfile, q = q, p = p)
 
 source("lib/setUpslurm.R")
-setUpslurm(slurmsh=slurmfile,
-           codesh=paste("sh", shfile),
-           wd=NULL, jobid="qcjob")
+setUpslurm(slurmsh=slurmfile, codesh=paste("sh", shfile), wd=NULL, jobid="qcjob")

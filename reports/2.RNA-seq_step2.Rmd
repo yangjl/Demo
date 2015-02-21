@@ -61,15 +61,39 @@ source("lib/PE_qc.R")
 PE_qc(fqfile = fastqfile, shfile = shfile, q = q, p = p)
 
 source("lib/setUpslurm.R")
-setUpslurm(slurmsh=slurmfile, codesh=paste("sh", shfile), wd=NULL, jobid="qcjob", email=myemail)
+setUpslurm(slurmsh=slurmfile, codesh=paste("sh", shfile), wd=NULL, jobid="qcjob")
 
 ```
 
 You can submit the slurm job as following:
 `sbatch -p serial --ntasks 1 largedata/slurm_step1_qc.sh`
 
+The results can be checked in the `largedata/leaf/` and `largedata/root/` folders. Here are two examples of the quality checking plots.
+
 ![alt](../largedata/leaf/leaf.rep1_1.fastq.qc.png)
 ![alt](../largedata/leaf/leaf.rep1_1.fastq.nud.png)
+
+
+### Aligning RNA-seq reads to reference genome
+
+[GSNAP]() was used for alignment with the following parameters changed. 
+
+`gsnap -D largedata/OS_indica -d ASM465v1.25_gsnap -m 10 -i 2 -N 1 -w 10000 -A sam -t 8`    
+`-n 3 --quality-protocol=sanger --nofails fq1 fq2 --split-output OUTPUT`
+
+* -m miss match
+* -i indel penalty
+* -N: look for novel splicing, 1=yes
+* -w: definition of local novel splicing event
+* -A: output sam format
+* -t: number of CPU to use
+* -n: max number of paths to print
+
+
+
+
+
+
 
 
 

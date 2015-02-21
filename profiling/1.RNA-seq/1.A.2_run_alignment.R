@@ -1,28 +1,22 @@
 ### Jinliang yang
 ### 2.17.2015
 
-cpu <- 8
-fq1 <- "SRR1170742.sra_1.fastq"
-fq2 <- "SRR1170742.sra_2.fastq"
-shfile <- "align1.sh"
+### input
+fastqfile = "largedata/sample.txt"
 
-fq1 <- "SRR1170744.sra_1.fastq"
-fq2 <- "SRR1170744.sra_2.fastq"
-shfile <- "align2.sh"
+### output scripts
+shfile = "largedata/step2_align.sh"
+slurmfile = "largedata/slurm_step2_align.sh"
+### number of CPU to use for mapping
+cpu = 8
 
-########
+
+######################################################################
 source("lib/PE_alignment.R")
-setup_PE_alignment(
-  shfile = shfile,
-  folder = "largedata", cpu = cpu,
-  fq1 = fq1,
-  fq2 = fq2)
+setup_PE_alignment(fqfile = fastqfile, shfile = shfile, cpu=cpu)
 
-#########
 source("lib/setUpslurm.R")
-setUpslurm(
-  slurmsh = paste0("largedata/run_", shfile),
-  codesh = paste0("sh largedata/", shfile),
-  oneline=TRUE,
-  wd=NULL, jobid= shfile)
+setUpslurm(slurmsh=slurmfile, wd=NULL, jobid="mapping",
+           codesh= paste("module load gmap/2014-05-15",paste("sh", shfile), sep="\n"))
 
+gsnap -D ~/Documents/Github/Demo/largedata/OS_indica -d ASM465v1.25_gsnap -m 10 -i 2 -N 1 -w 10000 -A sam -t 8 -n 3 --quality-protocol=sanger --nofails largedata/leaf/leaf.rep1_1.fastq largedata/leaf/leaf.rep1_2.fastq --split-output largedata/leaf/leaf.rep1_1.fastq

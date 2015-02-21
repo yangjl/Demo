@@ -1,3 +1,6 @@
+# Jinliang Yang
+# updated: 1.17.2015
+
 PE_qc <- function(fqfile = "largedata/sample.txt", shfile = "largedata/step1_qc.sh",
                   q = 25, p =50){
   
@@ -13,14 +16,14 @@ PE_qc <- function(fqfile = "largedata/sample.txt", shfile = "largedata/step1_qc.
     stat1 <- paste(fq1, "stat", sep=".")
     qcpng1 <- paste(fq1, "qc.png", sep=".")
     nudpng1 <- paste(fq1, "nud.png", sep=".")
-    gz1 <- paste(fq1, "qc.gz", sep=".")
+    gz1 <- paste(fq1, "qc", sep=".")
     res1 <- paste(fq1, "res", sep=".")
     
     fq2 <- paste0("largedata/", fq$fq2[i])
     stat2 <- paste(fq2, "stat", sep=".")
     qcpng2 <- paste(fq2, "qc.png", sep=".")
     nudpng2 <- paste(fq2, "nud.png", sep=".")
-    gz2 <- paste(fq2, "qc.gz", sep=".")
+    gz2 <- paste(fq2, "qc", sep=".")
     res2 <- paste(fq2, "res", sep=".")
     
     cat(
@@ -45,7 +48,7 @@ PE_qc <- function(fqfile = "largedata/sample.txt", shfile = "largedata/step1_qc.
       file=shfile, sep="\n", append=TRUE)
     
   }
-  message(sprintf("###>>> [ %s ] generated!", shfile))
+  message(sprintf("###>>> Generate [ %s ] for quality checking using FASTX!", shfile))
 }
 
 
