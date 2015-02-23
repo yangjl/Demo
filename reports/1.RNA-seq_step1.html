@@ -62,16 +62,6 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="download-rna-seq-data" class="section level3">
 <h3>Download RNA-seq data</h3>
 <p>All the RNA-seq data used in this class were downloaded from <code>NCBI</code> Sequence Read Archive (SRA) database using <a href="http://www.gnu.org/software/wget/wget.html">wget</a>. Note: the RNA-seq data and intermediate outputs are put in the folder of <code>largedata</code>.</p>
-<pre class="r"><code>cd largedata/leaf/
-### Oryza barthii, leaf RNA-seq, PE, 121 bp
-wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170742/SRR1170742.sra
-### extract the PE reads from sra format
-fastq-dump --split-spot --split-3 -A SRR1170742.sra
-
-### Oryza barthii, root RNA-seq, PE, 121bp
-cd largedata/root/
-wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170744/SRR1170744.sra
-fastq-dump --split-spot --split-3 -A SRR1170744.sra</code></pre>
 <pre class="r"><code>cd glumipatula/
 ### Oryza glumipatula, leaf RNA-seq, PE, 101bp
 wget get ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1174772/SRR1174772.sra
@@ -84,11 +74,9 @@ wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117
 fastq-dump --split-spot --split-3 -A SRR1174772.sra
 fastq-dump --split-spot --split-3 -A SRR1174777.sra</code></pre>
 </div>
-<div id="data-for-homework-oryza-glumipatula" class="section level3">
-<h3>Data for homework <code>Oryza glumipatula</code></h3>
-<pre class="r"><code>### Oryza glumipatula root RNA seq
-
-wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1174777/SRR1174777.sra</code></pre>
+<div id="simulate-an-experiment-with-three-replications" class="section level3">
+<h3>Simulate an experiment with three replications</h3>
+<p>The aim of this experiment is to compare the differentially expressed genes in two different tissue type: <code>leaf</code> vs. <code>root</code>. One million reads were extracted for each rep.</p>
 <pre class="r"><code>cd largedata/
 ### checking the total number of reads
 wc -l glumipatula/SRR1174772.sra_1.fastq 
@@ -111,17 +99,9 @@ cat glumipatula/SRR1174777.sra_1.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &
 cat glumipatula/SRR1174777.sra_2.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; root/root.rep2_2.fastq
 cat glumipatula/SRR1174777.sra_1.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; root/root.rep3_1.fastq
 cat glumipatula/SRR1174777.sra_2.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; root/root.rep3_2.fastq</code></pre>
-<pre class="r"><code>module load gmap/2014-05-15
-
-gsnap -D largedata/OS_indica -d ASM465v1.25_gsnap -m 6 -i 2 -N 1 -w 10000 -A sam -t 8 -n 3 --quality-protocol=sanger --nofails largedata/root/root.rep1_1.fastq largedata/root/root.rep1_2.fastq --split-output largedata/root/temp/root.rep1
-mv largedata/root/temp/root.rep1.concordant_uniq largedata/root/temp/root.rep1_uniq.sorted.sam
-
-
-module load HTSeq/0.5.4p5
-htseq-count root/root.rep1.sam OS_indica/Oryza_indica.ASM465v1.25.gff3 -i Parent &gt; test.out</code></pre>
 </div>
-<div id="create-a-txt-file" class="section level3">
-<h3>Create a txt file</h3>
+<div id="log-sample-info-to-a-txt-file" class="section level3">
+<h3>Log sample info to a txt file</h3>
 <p>Open <code>vi</code>, specify the <strong>relative location</strong> and names of the fastq files. And, the <code>replications</code> and <code>treatments</code> of your experimental design.</p>
 <pre class="r"><code>### copy the following text into your sample.txt file.
 fq1 fq2 rep tissue

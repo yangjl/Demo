@@ -17,4 +17,6 @@ source("lib/PE_qc.R")
 PE_qc(fqfile = fastqfile, shfile = shfile, q = q, p = p)
 
 source("lib/setUpslurm.R")
-setUpslurm(slurmsh=slurmfile, codesh=paste("sh", shfile), wd=NULL, jobid="qcjob")
+setUpslurm(slurmsh=slurmfile, 
+           codesh= paste("module load FASTX-Toolkit/0.0.13.2-goolf-1.4.10", paste("sh", shfile), sep="\n"),
+           wd=NULL, jobid="qcjob")

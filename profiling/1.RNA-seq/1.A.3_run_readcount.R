@@ -32,7 +32,7 @@ rpkm <- apply(rc, 2, function(x) returnRPKM(counts=x, gffsub=eByg))
 write.table(rpkm, "largedata/rpkm.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 
-
-
-
+#rpkm <- read.csv("largedata/rpkm.csv")
+#tem <- rpkm[,1]
+#plot(density(tem[tem>10]))
 

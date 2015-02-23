@@ -13,6 +13,7 @@ output: html_document
 4. Differential gene expression study
 
 The following four source files will do the four analysis repectively.
+Note: this pipeline has to be ran in your home directory of `Demo`. All the codes in this project were used their relatieve paths. SO, you have to keep in mind that where is your file relative to the home dir of `Demo`.
 
 ```{r, eval=FALSE}
 ### quality checking
@@ -150,3 +151,9 @@ A formula which specifies the design of the experiment, taking the form `formula
 ```{r, eval=FALSE}
 source("profiling/1.RNA-seq/1.A.4_run_DEseq2.R")
 ```
+
+#### GO term enrichment
+
+
+#### FDR
+
