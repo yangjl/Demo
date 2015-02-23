@@ -21,7 +21,7 @@ setup_PE_alignment <- function(
     
     prefix <- gsub("_1\\.fastq$", "", fq1)
     uniq <- paste(prefix, "concordant_uniq", sep=".")
-    bam <- paste(prefix, "concordant_uniq.bam", sep=".")
+    bam <- paste(prefix, "uniq.bam", sep=".")
     
     cat(#### GSNAP alignment
         # -m miss match
@@ -32,12 +32,13 @@ setup_PE_alignment <- function(
         # -t: number of CPU to use
         # -n: max number of paths to print
         
-        paste("gsnap -D largedata/OS_indica -d ASM465v1.25_gsnap -m 10 -i 2 -N 1 -w 10000 -A sam -t", cpu,
+        paste("gsnap -D largedata/OS_204_v7/ -d Osative_204_v7 -m 8 -i 2 -N 1 -w 10000 -A sam -t", cpu,
               "-n 3 --quality-protocol=sanger --nofails",
               fq1, fq2, "--split-output", prefix, sep=" "),
         ### extract the unique (or reliable) aligned reads
         #http://sourceforge.net/apps/mediawiki/samtools/index.php?title=SAM_FAQ
         paste("samtools view -bS", uniq, ">", bam, sep=" "),
+        paste("rm *concordant* *halfmapping* *nomapping* *paired*"),
         "",
         file=shfile, sep="\n", append=TRUE)
   }

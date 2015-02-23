@@ -91,16 +91,16 @@ fastq-dump --split-spot --split-3 -A SRR1174777.sra</code></pre>
 wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1174777/SRR1174777.sra</code></pre>
 <pre class="r"><code>cd largedata/
 ### checking the total number of reads
-wc -l SRR1170742.sra_1.fastq 
-#160468896 SRR1170742.sra_1.fastq
+wc -l glumipatula/SRR1174772.sra_1.fastq 
+#660468896 SRR1170742.sra_1.fastq
 
 ### split the fq files into three files as arbitrarily assigned replications
-cat SRR1170742.sra_1.fastq | awk 'NR &gt;= 4000001  &amp;&amp; NR &lt;= 8000000 { print }' &gt; leaf/leaf.rep1_1.fastq
-cat SRR1170742.sra_2.fastq | awk 'NR &gt;= 4000001  &amp;&amp; NR &lt;= 8000000 { print }' &gt; leaf/leaf.rep1_2.fastq
-cat SRR1170742.sra_1.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; leaf/leaf.rep2_1.fastq
-cat SRR1170742.sra_2.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; leaf/leaf.rep2_2.fastq
-cat SRR1170742.sra_1.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; leaf/leaf.rep3_1.fastq
-cat SRR1170742.sra_2.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; leaf/leaf.rep3_2.fastq
+cat glumipatula/SRR1174772.sra_1.fastq | awk 'NR &gt;= 4000001  &amp;&amp; NR &lt;= 8000000 { print }' &gt; leaf/leaf.rep1_1.fastq
+cat glumipatula/SRR1174772.sra_2.fastq | awk 'NR &gt;= 4000001  &amp;&amp; NR &lt;= 8000000 { print }' &gt; leaf/leaf.rep1_2.fastq
+cat glumipatula/SRR1174772.sra_1.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; leaf/leaf.rep2_1.fastq
+cat glumipatula/SRR1174772.sra_2.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; leaf/leaf.rep2_2.fastq
+cat glumipatula/SRR1174772.sra_1.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; leaf/leaf.rep3_1.fastq
+cat glumipatula/SRR1174772.sra_2.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; leaf/leaf.rep3_2.fastq
 
 wc -l glumipatula/SRR1174777.sra_1.fastq 
 #665118764 SRR1174777.sra_1.fastq
@@ -110,11 +110,15 @@ cat glumipatula/SRR1174777.sra_2.fastq | awk 'NR &gt;= 4000001  &amp;&amp; NR &l
 cat glumipatula/SRR1174777.sra_1.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; root/root.rep2_1.fastq
 cat glumipatula/SRR1174777.sra_2.fastq | awk 'NR &gt;= 14000001  &amp;&amp; NR &lt;= 18000000 { print }' &gt; root/root.rep2_2.fastq
 cat glumipatula/SRR1174777.sra_1.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; root/root.rep3_1.fastq
-cat glumipatula/SRR1174777.sra_2.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; root/root.rep3_2.fastq
+cat glumipatula/SRR1174777.sra_2.fastq | awk 'NR &gt;= 24000001  &amp;&amp; NR &lt;= 28000000 { print }' &gt; root/root.rep3_2.fastq</code></pre>
+<pre class="r"><code>module load gmap/2014-05-15
+
+gsnap -D largedata/OS_indica -d ASM465v1.25_gsnap -m 6 -i 2 -N 1 -w 10000 -A sam -t 8 -n 3 --quality-protocol=sanger --nofails largedata/root/root.rep1_1.fastq largedata/root/root.rep1_2.fastq --split-output largedata/root/temp/root.rep1
+mv largedata/root/temp/root.rep1.concordant_uniq largedata/root/temp/root.rep1_uniq.sorted.sam
 
 
-module load gmap/2014-05-15
-gsnap -D largedata/OS_indica -d ASM465v1.25_gsnap -m 10 -i 2 -N 1 -w 10000 -A sam -t 8 -n 3 --quality-protocol=sanger --nofails largedata/root/root.rep1_1.fastq largedata/root/root.rep1_2.fastq --split-output largedata/root/root.rep1</code></pre>
+module load HTSeq/0.5.4p5
+htseq-count root/root.rep1.sam OS_indica/Oryza_indica.ASM465v1.25.gff3 -i Parent &gt; test.out</code></pre>
 </div>
 <div id="create-a-txt-file" class="section level3">
 <h3>Create a txt file</h3>

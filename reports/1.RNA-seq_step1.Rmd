@@ -10,19 +10,6 @@ output: html_document
 All the RNA-seq data used in this class were downloaded from `NCBI` Sequence Read Archive (SRA) database using [wget](http://www.gnu.org/software/wget/wget.html).
 Note: the RNA-seq data and intermediate outputs are put in the folder of `largedata`.
 
-```{r, eval=FALSE}
-
-cd largedata/leaf/
-### Oryza barthii, leaf RNA-seq, PE, 121 bp
-wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170742/SRR1170742.sra
-### extract the PE reads from sra format
-fastq-dump --split-spot --split-3 -A SRR1170742.sra
-
-### Oryza barthii, root RNA-seq, PE, 121bp
-cd largedata/root/
-wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1170744/SRR1170744.sra
-fastq-dump --split-spot --split-3 -A SRR1170744.sra
-```
 
 ```{r, eval=FALSE}
 cd glumipatula/
@@ -39,26 +26,23 @@ fastq-dump --split-spot --split-3 -A SRR1174777.sra
 ```
 
 
-### Data for homework `Oryza glumipatula`
-```{r, eval=FALSE}
-### Oryza glumipatula root RNA seq
+### Simulate an experiment with three replications
 
-wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR117/SRR1174777/SRR1174777.sra
-```
+The aim of this experiment is to compare the differentially expressed genes in two different tissue type: `leaf` vs. `root`. One million reads were extracted for each rep.
 
 ```{r, eval=FALSE}
 cd largedata/
 ### checking the total number of reads
-wc -l SRR1170742.sra_1.fastq 
-#160468896 SRR1170742.sra_1.fastq
+wc -l glumipatula/SRR1174772.sra_1.fastq 
+#660468896 SRR1170742.sra_1.fastq
 
 ### split the fq files into three files as arbitrarily assigned replications
-cat SRR1170742.sra_1.fastq | awk 'NR >= 4000001  && NR <= 8000000 { print }' > leaf/leaf.rep1_1.fastq
-cat SRR1170742.sra_2.fastq | awk 'NR >= 4000001  && NR <= 8000000 { print }' > leaf/leaf.rep1_2.fastq
-cat SRR1170742.sra_1.fastq | awk 'NR >= 14000001  && NR <= 18000000 { print }' > leaf/leaf.rep2_1.fastq
-cat SRR1170742.sra_2.fastq | awk 'NR >= 14000001  && NR <= 18000000 { print }' > leaf/leaf.rep2_2.fastq
-cat SRR1170742.sra_1.fastq | awk 'NR >= 24000001  && NR <= 28000000 { print }' > leaf/leaf.rep3_1.fastq
-cat SRR1170742.sra_2.fastq | awk 'NR >= 24000001  && NR <= 28000000 { print }' > leaf/leaf.rep3_2.fastq
+cat glumipatula/SRR1174772.sra_1.fastq | awk 'NR >= 4000001  && NR <= 8000000 { print }' > leaf/leaf.rep1_1.fastq
+cat glumipatula/SRR1174772.sra_2.fastq | awk 'NR >= 4000001  && NR <= 8000000 { print }' > leaf/leaf.rep1_2.fastq
+cat glumipatula/SRR1174772.sra_1.fastq | awk 'NR >= 14000001  && NR <= 18000000 { print }' > leaf/leaf.rep2_1.fastq
+cat glumipatula/SRR1174772.sra_2.fastq | awk 'NR >= 14000001  && NR <= 18000000 { print }' > leaf/leaf.rep2_2.fastq
+cat glumipatula/SRR1174772.sra_1.fastq | awk 'NR >= 24000001  && NR <= 28000000 { print }' > leaf/leaf.rep3_1.fastq
+cat glumipatula/SRR1174772.sra_2.fastq | awk 'NR >= 24000001  && NR <= 28000000 { print }' > leaf/leaf.rep3_2.fastq
 
 wc -l glumipatula/SRR1174777.sra_1.fastq 
 #665118764 SRR1174777.sra_1.fastq
@@ -70,12 +54,9 @@ cat glumipatula/SRR1174777.sra_2.fastq | awk 'NR >= 14000001  && NR <= 18000000 
 cat glumipatula/SRR1174777.sra_1.fastq | awk 'NR >= 24000001  && NR <= 28000000 { print }' > root/root.rep3_1.fastq
 cat glumipatula/SRR1174777.sra_2.fastq | awk 'NR >= 24000001  && NR <= 28000000 { print }' > root/root.rep3_2.fastq
 
-
-module load gmap/2014-05-15
-gsnap -D largedata/OS_indica -d ASM465v1.25_gsnap -m 10 -i 2 -N 1 -w 10000 -A sam -t 8 -n 3 --quality-protocol=sanger --nofails largedata/root/root.rep1_1.fastq largedata/root/root.rep1_2.fastq --split-output largedata/root/root.rep1
 ```
 
-### Create a txt file
+### Log sample info to a txt file
 
 Open `vi`, specify the **relative location** and names of the fastq files.
 And, the `replications` and `treatments` of your experimental design.

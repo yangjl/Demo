@@ -14,6 +14,6 @@
 
 1. [RNA-seq data](http://rpubs.com/yangjl0930/61344)
 
-2. [RNA-seq Data Analysis]()
+2. [RNA-seq Data Analysis](http://rpubs.com/yangjl0930/60157)
 
 

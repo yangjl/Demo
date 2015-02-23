@@ -22,7 +22,7 @@ source("profiling/1.RNA-seq/1.A.2_run_alignment.R")
 ### prepare genomic features and count reads in genes
 source("profiling/1.RNA-seq/1.A.3_run_readcount.R")
 ### DE analysis
-source("profiling/1.RNA-seq/1.A.4_run_DEseq.R")
+source("profiling/1.RNA-seq/1.A.4_run_DEseq2.R")
 ```
 
 ### FASTQ file
@@ -93,6 +93,7 @@ The results can be checked in the `largedata/leaf/` and `largedata/root/` folder
 
 ### Count reads in gene models
 
+```{r, eval=FALSE}
 ###################################################
 ### prepare genomic features
 # More Robust: Store Annotations in TranscriptDb
@@ -101,52 +102,51 @@ source("http://bioconductor.org/biocLite.R")
 biocLite("GenomicFeatures")
 source("http://bioconductor.org/biocLite.R")
 biocLite("GenomicAlignments")
+source("http://bioconductor.org/biocLite.R")
+biocLite("DESeq2")
 
+library(GenomicFeatures)
+library(GenomicAlignments)
 
+txdb <- makeTranscriptDbFromGFF(file="largedata/OS_204_v7/Osativa_204_v7.0.gene_exons",
+                                format="gff3",
+                                dataSource="phytozome",
+                                species="oryza")
 
+saveDb(txdb, file="largedata/Osativa_204_v7.0.sqlite")
+```
 
-
-
+#### Compute raw read count and conduct RPKM normalization
 
 It is important to keep in mind the nature of those "features" to which reads were mapped for counting. If, for example, reads are mapped to a set of references that include different splice variants of the same gene, those splice variants will each be analyzed separately unless treated as a unit. The nature of the features encompassed by read count data depends on what the mapping reference is (e.g. a genome or transcriptome assembly), and what type of aligner was used. Some pieces of analysis software are designed to handle isoform differences (Leng et al. 2013; Trapnell et al. 2013), and others analyze generic features of the transcriptome, so please consider this when selecting both read alignment and differential expression software.
 
+```{r, eval=FALSE}
+source("profiling/1.RNA-seq/1.A.3_run_readcount.R")
+```
 
-### Important steps and useful functions
+
+#### QC checking of RPKM
+
+QC check of the sample reproducibility by computing a correlating matrix and plotting it as a tree.
+```{r, eval=TRUE}
+
+#Note: the plotMDS function from edgeR is a more robust method for this task.
+library(ape)
+rpkm <- read.csv("../largedata/rpkm.csv")
+d <- cor(rpkm, method="spearman")
+hc <- hclust(dist(1-d))
+plot.phylo(as.phylo(hc), type="p", edge.col=4, edge.width=3, show.node.label=TRUE, no.margin=TRUE)
+
+
+```
+
+### Differential gene expression study
+
+Important! Raw count data are expected here for `DESeq2`!
+
+#### design  
+A formula which specifies the design of the experiment, taking the form `formula(~ x + y + z)`. By default, the functions in this package will use the last variable in the formula (e.g. z) for presenting results (fold changes, etc.) and plotting.
 
 ```{r, eval=FALSE}
-source("http://bioconductor.org/biocLite.R")
-biocLite("GenomicFeatures")
-library(GenomicFeatures)
-
-txdb <- makeTranscriptDbFromGFF(
-  file="data/Osativa_204_v7.0.gene_exons",
-  format="gff3", species="oryza_indica",useGenesAsTranscripts=FALSE,
-  dataSource="http://genome.jgi.doe.gov/pages/dynamicOrganismDownload.jsf?organism=Osativa")
-
-saveDb(txdb, file="cache/Osativa_204_v7.0.sqlite")
+source("profiling/1.RNA-seq/1.A.4_run_DEseq2.R")
 ```
-
-
-```{r, eval=FALSE}
-###################################################
-### Function to compute RPKM
-###################################################
-getRPKM <- function(counts, gffsub=eByg) {
-  geneLengthsInKB <- sum(width(reduce(gffsub)))/1000 # Length of exon union per gene in kbp
-  millionsMapped <- sum(counts)/1e+06 # Factor for converting to million of mapped reads.
-  rpm <- counts/millionsMapped # RPK: reads per kilobase of exon model.
-  rpkm <- rpm/geneLengthsInKB # RPKM: reads per kilobase of exon model per million mapped reads.
-  return(rpkm)
-}
-
-```
-
-
-
-You can also embed plots, for example:
-
-```{r, echo=FALSE}
-plot(cars)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
