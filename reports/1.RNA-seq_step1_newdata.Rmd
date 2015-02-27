@@ -66,6 +66,35 @@ cat glumipatula/SRR1174773.sra_2.fastq | awk 'NR >= 240000001  && NR <= 32000000
 
 ```
 
+### Download data for Sativa
+```{r, eval=FALSE}
+### leaf
+cd largedata/sativa/leaf/
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR447/SRR447122/SRR447122.sra
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR447/SRR447123/SRR447123.sra
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR447/SRR447124/SRR447124.sra
+fastq-dump --split-spot --split-3 SRR447124.sra
+### root
+cd ../root/
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR447/SRR447117/SRR447117.sra
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR447/SRR447118/SRR447118.sra
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR447/SRR447119/SRR447119.sra
+fastq-dump --split-spot --split-3 SRR447117.sra
+fastq-dump --split-spot --split-3 SRR447118.sra
+fastq-dump --split-spot --split-3 SRR447119.sra
+### panicle PE 75bp
+cd ../panicle/
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR037/SRR037739/SRR037739.sra
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR037/SRR037738/SRR037738.sra
+wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/SRR037/SRR037734/SRR037734.sra
+fastq-dump --split-spot --split-3 SRR037734.sra
+fastq-dump --split-spot --split-3 SRR037738.sra
+fastq-dump --split-spot --split-3 SRR037739.sra
+```
+
+
+
+
 ### Log sample info to a txt file
 
 Open `vi`, specify the **relative location** and names of the fastq files.
@@ -73,14 +102,54 @@ And, the `replications` and `treatments` of your experimental design.
 
 ```{r, eval=FALSE}
 ### copy the following text into your sample.txt file.
-fq1 fq2 rep tissue
-leaf/leaf.rep1_1.fastq leaf/leaf.rep1_2.fastq rep1 leaf
-leaf/leaf.rep2_1.fastq leaf/leaf.rep2_2.fastq rep2 leaf
-leaf/leaf.rep3_1.fastq leaf/leaf.rep3_2.fastq rep3 leaf
-root/root.rep1_1.fastq root/root.rep1_2.fastq rep1 root
-root/root.rep2_1.fastq root/root.rep2_2.fastq rep2 root
-root/root.rep3_1.fastq root/root.rep3_2.fastq rep3 root
+fq1 fq2 rep tissue taxa
+glumipatula/leaf/leaf.rep1_1.fastq glumipatula/leaf/leaf.rep1_2.fastq rep1 leaf glumipatula
+glumipatula/leaf/leaf.rep2_1.fastq glumipatula/leaf/leaf.rep2_2.fastq rep2 leaf glumipatula
+glumipatula/leaf/leaf.rep3_1.fastq glumipatula/leaf/leaf.rep3_2.fastq rep3 leaf glumipatula
+
+fq1 fq2 rep tissue taxa
+glumipatula/root/root.rep1_1.fastq glumipatula/root/root.rep1_2.fastq rep1 root glumipatula
+glumipatula/root/root.rep2_1.fastq glumipatula/root/root.rep2_2.fastq rep2 root glumipatula
+glumipatula/root/root.rep3_1.fastq glumipatula/root/root.rep3_2.fastq rep3 root glumipatula
+
 ```
+
+
+```{r, eval=FALSE}
+### sample2
+fq1 fq2 rep tissue taxa
+glumipatula/panicle/panicle.rep1_1.fastq glumipatula/panicle/panicle.rep1_2.fastq rep1 panicle glumipatula
+glumipatula/panicle/panicle.rep2_1.fastq glumipatula/panicle/panicle.rep2_2.fastq rep2 panicle glumipatula
+glumipatula/panicle/panicle.rep3_1.fastq glumipatula/panicle/panicle.rep3_2.fastq rep3 panicle glumipatula
+```
+
+./leaf:
+SRR447122_1.fastq  SRR447122.sra      SRR447123_2.fastq  SRR447123.fastq  SRR447124_1.fastq  SRR447124.sra
+SRR447122_2.fastq  SRR447123_1.fastq  SRR447123_.fastq   SRR447123.sra    SRR447124_2.fastq
+
+./panicle:
+SRR037734_1.fastq  SRR037734.sra      SRR037738_2.fastq  SRR037739_1.fastq  SRR037739.sra
+SRR037734_2.fastq  SRR037738_1.fastq  SRR037738.sra      SRR037739_2.fastq
+
+```{r, eval=FALSE}
+### samples for sativa
+fq1 fq2 rep tissue taxa
+sativa/leaf/SRR447122_1.fastq sativa/leaf/SRR447122_2.fastq rep1 leaf sativa
+sativa/leaf/SRR447123_1.fastq sativa/leaf/SRR447123_2.fastq rep2 leaf sativa
+sativa/leaf/SRR447124_1.fastq sativa/leaf/SRR447124_2.fastq rep3 leaf sativa
+
+fq1 fq2 rep tissue taxa
+sativa/root/SRR447117_1.fastq sativa/root/SRR447117_2.fastq rep1 root sativa
+sativa/root/SRR447118_1.fastq sativa/root/SRR447118_2.fastq rep2 root sativa
+sativa/root/SRR447119_1.fastq sativa/root/SRR447119_2.fastq rep3 root sativa
+
+fq1 fq2 rep tissue taxa
+sativa/panicle/SRR037734_1.fastq sativa/panicle/SRR037734_2.fastq rep1 leaf sativa
+sativa/panicle/SRR037738_1.fastq sativa/panicle/SRR037738_2.fastq rep2 leaf sativa
+sativa/panicle/SRR037739_1.fastq sativa/panicle/SRR037739_2.fastq rep3 leaf sativa
+```
+
+
 
 ### Download reference genome and annotation data
 

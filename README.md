@@ -1,4 +1,6 @@
-#RNA-seq Experiment
+#RNA-seq on UCD farm
+
+An RNA-seq differential expression analysis pipeline designed for job submission on `UCD farm` cluster using `slurm` system.
 
 # Install
 

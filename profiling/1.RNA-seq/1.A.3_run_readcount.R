@@ -3,7 +3,7 @@
 ##
 
 
-featureDB <- "largedata/Osativa_204_v7.0.sqlite"
+featureDB <- "largedata/ASM465v1.25_edited.sqlite"
 samples <- "largedata/sample.txt"
 
 
