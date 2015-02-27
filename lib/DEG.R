@@ -2,11 +2,8 @@
 ## 8.11.2014
 ## Using DESeq to analyze differentially expressed genes
 
-deg <- Run_DESeq2(rcdata=as.matrix(rc), colData = targets, designModel = formula(~ rep + tissue))
-
-
 ##########################
-DESeq2_pipe <- function(rcdata=rc, colfile="file.txt", 
+Run_DESeq2 <- function(rcdata=rc, colfile="file.txt", 
                         designModel = formula(~ rep + tissue)){
   ################################################
   cols <- read.table(colfile, header=TRUE)
