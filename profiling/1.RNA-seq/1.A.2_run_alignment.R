@@ -2,7 +2,7 @@
 ### 2.17.2015
 
 ### input
-for(i in 1:6){
+for(i in 4:6){
   samples = paste0("largedata/sample", i, ".txt")
   
   ### output scripts
@@ -13,8 +13,9 @@ for(i in 1:6){
   
   
   ######################################################################
-  source("lib/PE_alignment.R")
-  setup_PE_alignment(fqfile = samples, shfile = shfile, cpu=cpu)
+  #source("lib/PE_alignment.R")
+  setup_PE_alignment(fqfile = samples, shfile = shfile,
+                     DBdir="largedata/OS_204_v7/", DBnm="Osative_204_v7", miss=8, cpu=8)
   
   source("lib/setUpslurm.R")
   setUpslurm(slurmsh=slurmfile, wd=NULL, jobid= paste0("align", i),

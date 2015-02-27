@@ -3,7 +3,8 @@
 # setup alignment and collect alignment statistics
 
 setup_PE_alignment <- function(
-  fqfile = "largedata/sample.txt", shfile = "largedata/step2_align.sh", cpu=8
+  fqfile = "largedata/sample.txt", shfile = "largedata/step2_align.sh", 
+  DBdir="", DBnm="Osative_204_v7", miss=8, cpu=8
   ){
   
   cat(paste("# setup alignment", Sys.time(), sep=" "),
@@ -32,13 +33,13 @@ setup_PE_alignment <- function(
         # -t: number of CPU to use
         # -n: max number of paths to print
         
-        paste("gsnap -D largedata/OS_204_v7/ -d Osative_204_v7 -m 8 -i 2 -N 1 -w 10000 -A sam -t", cpu,
+        paste("gsnap -D", DBdir,"-d", DBnm, "-m", miss, "-i 2 -N 1 -w 10000 -A sam -t", cpu,
               "-n 3 --quality-protocol=sanger --nofails",
               fq1, fq2, "--split-output", prefix, sep=" "),
         ### extract the unique (or reliable) aligned reads
         #http://sourceforge.net/apps/mediawiki/samtools/index.php?title=SAM_FAQ
         paste("samtools view -bS", uniq, ">", bam, sep=" "),
-        paste("rm *concordant* *halfmapping* *nomapping* *paired*"),
+        paste("#rm *concordant* *halfmapping* *nomapping* *paired*"),
         "",
         file=shfile, sep="\n", append=TRUE)
   }
