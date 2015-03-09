@@ -5,9 +5,10 @@ An RNA-seq differential expression analysis pipeline designed for job submission
 # Install
 
 `git clone https://github.com/yangjl/Demo.git`
-In addition, you have to manually copy the `largedata` folder to your directory:
-`cp -r /group/grigrp5/ECL298/largedata/ .`
-
+Remove the largedata folder:
+`rmdir largedata`
+Then make a link to the `largedata` folder to your directory:
+`ln -s /group/jrigrp5/ECL298/Demo/largedata ./largedata`
 
 # Directory
 
