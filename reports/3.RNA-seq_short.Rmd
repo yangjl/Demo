@@ -5,6 +5,16 @@ date: "February 26, 2015"
 output: html_document
 ---
 
+# Install required **Bioconductor** libraries.
+If you encountered any problems, try to `module load R` before you open `R console` in the terminal.
+```{r, eval=FALSE}
+source("http://bioconductor.org/biocLite.R")
+biocLite("GenomicFeatures")
+source("http://bioconductor.org/biocLite.R")
+biocLite("GenomicAlignments")
+source("http://bioconductor.org/biocLite.R")
+biocLite("DESeq2")
+```
 # RNA-seq Differential Expression Analysis in Two Steps
 
 

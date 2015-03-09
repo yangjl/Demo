@@ -59,6 +59,16 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </div>
 
 
+<div id="bioconductor-libraries" class="section level1">
+<h1>Bioconductor libraries</h1>
+<p>Install required <strong>Bioconductor</strong> libraries. If you encountered any problem, try to <code>module load R</code> before you open <code>R console</code> in the terminal.</p>
+<pre class="r"><code>source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite(&quot;GenomicFeatures&quot;)
+source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite(&quot;GenomicAlignments&quot;)
+source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite(&quot;DESeq2&quot;)</code></pre>
+</div>
 <div id="rna-seq-differential-expression-analysis-in-two-steps" class="section level1">
 <h1>RNA-seq Differential Expression Analysis in Two Steps</h1>
 <pre class="r"><code>##### get raw read count on gene features
