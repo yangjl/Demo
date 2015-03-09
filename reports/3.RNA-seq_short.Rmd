@@ -5,7 +5,7 @@ date: "February 26, 2015"
 output: html_document
 ---
 
-# Install required **Bioconductor** libraries.
+# Install required **Bioconductor** libraries
 If you encountered any problems, try to `module load R` before you open `R console` in the terminal.
 ```{r, eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
