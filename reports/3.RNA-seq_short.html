@@ -61,13 +61,17 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 <div id="install-required-bioconductor-libraries" class="section level1">
 <h1>Install required <strong>Bioconductor</strong> libraries</h1>
-<p>If you encountered any problems, try to <code>module load R</code> before you open <code>R console</code> in the terminal.</p>
+<p>Copy the following in the opened <code>R console</code>, it should install all the packages under your own directory.</p>
 <pre class="r"><code>source(&quot;http://bioconductor.org/biocLite.R&quot;)
 biocLite(&quot;GenomicFeatures&quot;)
 source(&quot;http://bioconductor.org/biocLite.R&quot;)
 biocLite(&quot;GenomicAlignments&quot;)
 source(&quot;http://bioconductor.org/biocLite.R&quot;)
 biocLite(&quot;DESeq2&quot;)</code></pre>
+<p>If you encountered any problems, try to <code>module load R</code> before you open <code>R console</code> in the terminal.</p>
+<pre class="r"><code>srun -p class --pty bash #open a pseudo bash, -p: specify the partition 
+module load R #load the R module
+R #open R console</code></pre>
 </div>
 <div id="rna-seq-differential-expression-analysis-in-two-steps" class="section level1">
 <h1>RNA-seq Differential Expression Analysis in Two Steps</h1>

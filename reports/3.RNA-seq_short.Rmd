@@ -6,7 +6,7 @@ output: html_document
 ---
 
 # Install required **Bioconductor** libraries
-If you encountered any problems, try to `module load R` before you open `R console` in the terminal.
+Copy the following in the opened `R console`, it should install all the packages under your own directory.
 ```{r, eval=FALSE}
 source("http://bioconductor.org/biocLite.R")
 biocLite("GenomicFeatures")
@@ -14,6 +14,13 @@ source("http://bioconductor.org/biocLite.R")
 biocLite("GenomicAlignments")
 source("http://bioconductor.org/biocLite.R")
 biocLite("DESeq2")
+```
+
+If you encountered any problems, try to `module load R` before you open `R console` in the terminal.
+```{r, eval=FALSE}
+srun -p class --pty bash #open a pseudo bash, -p: specify the partition 
+module load R #load the R module
+R #open R console
 ```
 # RNA-seq Differential Expression Analysis in Two Steps
 
