@@ -5,22 +5,12 @@ An RNA-seq differential expression analysis pipeline designed for job submission
 # Install
 
 `git clone https://github.com/yangjl/Demo.git`
-In addition, you have to manually copy the `largedata` folder to your directory:
-`cp -r /group/grigrp5/ECL298/largedata/ .`
 
+# Using pseudo shell to open `R`
 
-# Directory
+`cd /path/to/Demo`: change to the path of this Repo.
+`srun -p serial --pty --mem 8000 R`: open R console using pseudo shell
 
-1. `largedata` contains fastq files, sam file, etc.
-2. `profiling` R codes
-3. `reports` Rmd files to generate reports.
+# Tutorial:
 
-# Tutorial
-
-1. [RNA-seq data](http://rpubs.com/yangjl0930/61344)
-
-2. [RNA-seq Data Analysis](http://rpubs.com/yangjl0930/60157)
-
-# Using pseudo shell to open R
-`cd /path/to/Demo`
-`srun -p serial --pty --mem 8000 R`
+A short tutorial to instruct you how to do RNA-seq in two steps can be found [here](http://rpubs.com/yangjl0930/63347).

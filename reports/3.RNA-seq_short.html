@@ -59,8 +59,8 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </div>
 
 
-<div id="install-required-bioconductor-libraries." class="section level1">
-<h1>Install required <strong>Bioconductor</strong> libraries.</h1>
+<div id="install-required-bioconductor-libraries" class="section level1">
+<h1>Install required <strong>Bioconductor</strong> libraries</h1>
 <p>If you encountered any problems, try to <code>module load R</code> before you open <code>R console</code> in the terminal.</p>
 <pre class="r"><code>source(&quot;http://bioconductor.org/biocLite.R&quot;)
 biocLite(&quot;GenomicFeatures&quot;)
@@ -80,7 +80,7 @@ rc &lt;- ReadCount(bamfile = &quot;largedata/bamfiles.txt&quot;,
 source(&quot;lib/DEG.R&quot;)
 deg &lt;- Run_DESeq2(rcdata=as.matrix(rc), colfile = &quot;largedata/design.txt&quot;, designModel = formula(~ rep + tissue))</code></pre>
 <p><strong>rcdata:</strong> raw read count data generated from previous step.</p>
-<p><strong>colfile:</strong> for matrix input: a txt with at least a single column. Rows of colfile correspond to columns of countData. Must have header. see below as an example.</p>
+<p><strong>colfile:</strong> for matrix input: a txt with at least a single column. Rows of colfile correspond to columns of countData. The design file <strong>must</strong> contains header. see below as an example. Note in columns <code>fq1</code> and <code>fq2</code>, absolute or relative file locations should be specified.</p>
 <pre><code>fq1 fq2  rep tissue
 leaf.rep1_1.fastq leaf/leaf.rep1_2.fastq rep1   leaf
 leaf.rep2_1.fastq leaf/leaf.rep2_2.fastq rep2   leaf
@@ -88,7 +88,7 @@ leaf.rep3_1.fastq leaf/leaf.rep3_2.fastq rep3   leaf
 root.rep1_1.fastq root/root.rep1_2.fastq rep1   root
 root.rep2_1.fastq root/root.rep2_2.fastq rep2   root
 root.rep3_1.fastq root/root.rep3_2.fastq rep3   root</code></pre>
-<p><strong>designModel:</strong> a formula which specifies the design of the experiment, taking the form formula(~ rep + tissue). Note, the variables must match the header in colfile! By default, the functions in this package will use the last variable in the formula (e.g. tissue) for presenting results (fold changes, etc.) and plotting.</p>
+<p><strong>designModel:</strong> A formula which specifies the design of the experiment, taking the form formula(~ rep + tissue). Note, the variables must match the header in colfile! By default, the functions in this package will use the last variable in the formula (e.g. tissue) for presenting results (fold changes, etc.) and plotting.</p>
 </div>
 
 
